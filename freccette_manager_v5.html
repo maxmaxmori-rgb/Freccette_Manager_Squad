@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestione Squadra Freccette</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 1rem;
+            background: #0b0c10;
+            color: #f5f5f5;
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 0.2rem;
+        }
+
+        h2 {
+            margin-top: 1.2rem;
+            font-size: 1.1rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #bababa;
+            margin-bottom: 1.3rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: #1f2833;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        input[type="password"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.4rem 0.6rem;
+            margin-bottom: 0.6rem;
+            border-radius: 5px;
+            border: 1px solid #3b4a5a;
+            background: #0b0c10;
+            color: #f5f5f5;
+            font-size: 0.9rem;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #45a29e;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .col-2 {
+            flex: 1 1 220px;
+        }
+
+        .col-3 {
+            flex: 1 1 160px;
+        }
+
+        button {
+            border: none;
+            padding: 0.45rem 0.75rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: #45a29e;
+            color: #0b0c10;
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            filter: brightness(1.1);
+        }
+
+        .btn-small {
+            padding: 0.25rem 0.4rem;
+            font-size: 0.8rem;
+            margin: 0 1px;
+        }
+
+        .btn-danger {
+            background: #c76c6c;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #e0ad4f;
+            color: #0b0c10;
+        }
+
+        .btn-secondary {
+            background: #3b4a5a;
+            color: #f5f5f5;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            padding: 0.4rem 0.3rem;
+            text-align: center;
+        }
+
+        th {
+            background: #0b0c10;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        tr:nth-child(even) {
+            background: #202833;
+        }
+
+        tr:nth-child(odd) {
+            background: #151b23;
+        }
+
+        .right {
+            text-align: right;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .stats-summary {
+            font-size: 0.9rem;
+            color: #bababa;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+        }
+
+        .badge-good {
+            background: #1f6f5b;
+        }
+
+        .badge-bad {
+            background: #6f1f2b;
+        }
+
+        .badge-neutral {
+            background: #3b4a5a;
+        }
+
+        .badge-role {
+            background: #30475e;
+            font-size: 0.7rem;
+        }
+
+        .pill {
+            border-radius: 999px;
+            padding: 0.15rem 0.45rem;
+            font-size: 0.72rem;
+            display: inline-block;
+        }
+
+        .pill-campionato {
+            background: #144d2a;
+        }
+
+        .pill-amichevole {
+            background: #44340f;
+        }
+
+        .pill-altro {
+            background: #373043;
+        }
+
+        .pill-win {
+            background: #1f6f5b;
+        }
+
+        .pill-draw {
+            background: #525252;
+        }
+
+        .pill-loss {
+            background: #6f1f2b;
+        }
+
+        .pill-income {
+            background: #1f6f5b;
+        }
+
+        .pill-expense {
+            background: #6f1f2b;
+        }
+
+        .amount-expense {
+            color: #c76c6c;
+        }
+
+        .amount-income {
+            color: #45a29e;
+        }
+
+        .locked {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .trend-up {
+            color: #45a29e;
+            font-size: 0.75rem;
+        }
+
+        .trend-down {
+            color: #c76c6c;
+            font-size: 0.75rem;
+        }
+
+        .trend-stable {
+            color: #bababa;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            table {
+                font-size: 0.78rem;
+            }
+            th, td {
+                padding: 0.25rem 0.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Gestione Squadra Freccette</h1>
+    <div class="subtitle">Giocatori • Ruoli • Presenze • Partite (Set & Leg) • Contabilità</div>
+
+    <!-- SEZIONE: Giocatori -->
+    <div class="card">
+        <h2>Giocatori</h2>
+        <div class="row">
+            <div class="col-2">
+                <label for="nomeGiocatore">Nome</label>
+                <input type="text" id="nomeGiocatore" placeholder="Es. Marco Rossi">
+            </div>
+            <div class="col-2">
+                <label for="nicknameGiocatore">Nickname (opzionale)</label>
+                <input type="text" id="nicknameGiocatore" placeholder="Es. The Dart King">
+            </div>
+            <div class="col-2">
+                <label for="ruoloGiocatore">Ruolo</label>
+                <select id="ruoloGiocatore">
+                    <option value="Giocatore">Giocatore</option>
+                    <option value="Capitano">Capitano</option>
+                    <option value="Vice-capitano">Vice-capitano</option>
+                    <option value="Riserva">Riserva</option>
+                    <option value="Altro">Altro</option>
+                </select>
+            </div>
+        </div>
+        <button class="btn-primary" onclick="aggiungiGiocatore()">➕ Aggiungi giocatore</button>
+
+        <div style="margin-top:1rem;" class="stats-summary" id="riepilogoGeneraleGiocatori">
+            Nessun giocatore inserito.
+        </div>
+
+        <div style="overflow-x:auto; max-height: 50vh; margin-top: 0.5rem;">
+            <table>
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nome</th>
+                    <th>Ruolo</th>
+                    <th>Pres.</th>
+                    <th>Leg vinti</th>
+                    <th>Leg persi</th>
+                    <th>% vittoria</th>
+                    <th>Multe</th>
+                    <th>Azioni</th>
+                </tr>
+                </thead>
+                <tbody id="tbodyGiocatori">
+                <!-- JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- SEZIONE: Partite -->
+    <div class="card">
+        <h2>Partite</h2>
+
+        <div class="row">
+            <div class="col-3">
+                <label for="matchDate">Data</label>
+                <input type="date" id="matchDate">
+            </div>
+            <div class="col-3">
+                <label for="matchOpponent">Avversario</label>
+                <input type="text" id="matchOpponent" placeholder="Es. Bar degli Amici">
+            </div>
+            <div class="col-3">
+                <label for="matchType">Tipo</label>
+                <select id="matchType">
+                    <option value="Campionato">Campionato</option>
+                    <option value="Amichevole">Amichevole</option>
+                    <option value="Altro">Altro</option>
+                </select>
+            </div>
+            <div class="col-3">
+                <label for="matchLocation">Luogo (opzionale)</label>
+                <input type="text" id="matchLocation" placeholder="Es. Casa / Trasferta / Nome locale">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-3">
+                <label for="matchOurSets">Set vinti (noi)</label>
+                <input type="number" id="matchOurSets" min="0" value="0">
+            </div>
+            <div class="col-3">
+                <label for="matchTheirSets">Set vinti (loro)</label>
+                <input type="number" id="matchTheirSets" min="0" value="0">
+            </div>
+            <div class="col-3">
+                <label for="matchOurLegs">Leg vinti (noi)</label>
+                <input type="number" id="matchOurLegs" min="0" value="0">
+            </div>
+            <div class="col-3">
+                <label for="matchTheirLegs">Leg vinti (loro)</label>
+                <input type="number" id="matchTheirLegs" min="0" value="0">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-2">
+                <label for="matchNotes">Note</label>
+                <textarea id="matchNotes" placeholder="Note sulla partita, formazione, ecc."></textarea>
+            </div>
+        </div>
+
+        <button class="btn-primary" onclick="aggiungiPartita()">➕ Registra partita</button>
+
+        <div style="margin-top:1rem;" class="stats-summary" id="riepilogoPartite">
+            Nessuna partita registrata.
+        </div>
+
+        <div style="overflow-x:auto; max-height: 50vh; margin-top: 0.5rem;">
+            <table>
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Data</th>
+                    <th>Tipo</th>
+                    <th>Avversario</th>
+                    <th>Luogo</th>
+                    <th>Set (noi-loro)</th>
+                    <th>Leg (noi-loro)</th>
+                    <th>Risultato</th>
+                    <th>Note</th>
+                    <th>Azioni</th>
+                </tr>
+                </thead>
+                <tbody id="tbodyPartite">
+                <!-- JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- PROTEZIONE CONTABILITÀ -->
+    <div id="contabilitaLock" class="card" style="text-align:center; display:none;">
+        <h2>🔐 Contabilità protetta</h2>
+        <p style="color:#ccc;">Inserisci la password per vedere la contabilità.</p>
+
+        <input type="password" id="passwordContabilita" placeholder="Password" style="max-width:250px; margin:auto; display:block;">
+        <button class="btn-primary" onclick="sbloccaContabilita()" style="margin-top:10px;">Sblocca</button>
+
+        <div id="errorePassword" style="color:#c76c6c; margin-top:10px; display:none;">
+            Password errata ❌
+        </div>
+    </div>
+
+    <!-- SEZIONE: Contabilità -->
+    <div id="contabilitaSection" class="card" style="display:none;">
+        <h2>Contabilità</h2>
+
+        <div class="row">
+            <div class="col-3">
+                <label for="trnDate">Data</label>
+                <input type="date" id="trnDate">
+            </div>
+            <div class="col-3">
+                <label for="trnType">Tipo</label>
+                <select id="trnType">
+                    <option value="Entrata">Entrata</option>
+                    <option value="Uscita">Uscita</option>
+                </select>
+            </div>
+            <div class="col-3">
+                <label for="trnCategory">Categoria</label>
+                <input type="text" id="trnCategory" placeholder="Es. Quote, Multe pagate, Trasferta">
+            </div>
+            <div class="col-3">
+                <label for="trnAmount">Importo</label>
+                <input type="number" id="trnAmount" min="0" step="0.01" placeholder="Es. 10.00">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2">
+                <label for="trnDescription">Descrizione</label>
+                <textarea id="trnDescription" placeholder="Dettagli movimento (opzionale)"></textarea>
+            </div>
+        </div>
+
+        <button class="btn-primary" onclick="aggiungiMovimento()">➕ Aggiungi movimento</button>
+
+        <div style="margin-top:1rem;" class="stats-summary" id="riepilogoContabilita">
+            Nessun movimento registrato.
+        </div>
+
+        <div style="overflow-x:auto; max-height: 50vh; margin-top: 0.5rem;">
+            <table>
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Data</th>
+                    <th>Tipo</th>
+                    <th>Categoria</th>
+                    <th>Descrizione</th>
+                    <th>Importo</th>
+                    <th>Azioni</th>
+                </tr>
+                </thead>
+                <tbody id="tbodyMovimenti">
+                <!-- JS -->
+                </tbody>
+            </table>
+        </div>
+
+        <button class="btn-warning" onclick="bloccaContabilita()" style="margin-top:10px;">
+            🔒 Blocca contabilità
+        </button>
+    </div>
+
+    <!-- SEZIONE: Backup / reset -->
+    <div class="card">
+        <h2>Impostazioni & Backup</h2>
+        <p style="font-size:0.9rem; color:#bababa;">
+            I dati (giocatori + partite + contabilità) sono salvati nel browser (<code>localStorage</code>). Puoi esportare un backup, importare da file,
+            oppure resettare tutto.
+        </p>
+        <button class="btn-secondary" onclick="esportaDati()">📤 Esporta dati (JSON)</button>
+        <input type="file" id="importFile" accept=".json" onchange="importaDati(event)" style="margin-left:0.5rem; max-width:240px;">
+        <button class="btn-danger" style="margin-left:0.5rem;" onclick="resettaTutto()">🧨 Resetta tutto</button>
+    </div>
+</div>
+
+<script>
+    // =======================
+    // DATABASE (localStorage)
+    // =======================
+    const STORAGE_KEY_V2 = "dart_team_db_v2"; // formato: { players:[], matches:[], transactions:[] }
+    const OLD_STORAGE_KEY_V1 = "dart_team_db_v1"; // vecchio formato: array di players
+
+    let db = {
+        players: [],
+        matches: [],
+        transactions: []
+    };
+
+    // Password contabilità
+    const PASSWORD_CONTABILITA = "dartpass";
+
+    function caricaDati() {
+        const rawV2 = localStorage.getItem(STORAGE_KEY_V2);
+        if (rawV2) {
+            try {
+                const parsed = JSON.parse(rawV2);
+                if (!parsed.players || !Array.isArray(parsed.players)) throw new Error("Formato errato");
+                if (!parsed.matches || !Array.isArray(parsed.matches)) parsed.matches = [];
+                if (!parsed.transactions || !Array.isArray(parsed.transactions)) parsed.transactions = [];
+                db = parsed;
+
+                // assicuro campi giocatori
+                db.players.forEach(p => {
+                    if (!p.ruolo) p.ruolo = "Giocatore";
+                    if (typeof p.presenze !== "number") p.presenze = 0;
+                    if (typeof p.legVinti !== "number") p.legVinti = 0;
+                    if (typeof p.legPersi !== "number") p.legPersi = 0;
+
+                    if (typeof p.multeTotali !== "number") {
+                        if (typeof p.multe === "number") {
+                            p.multeTotali = p.multe;
+                        } else {
+                            p.multeTotali = 0;
+                        }
+                    }
+                    if (typeof p.multePagate !== "number") {
+                        p.multePagate = 0;
+                    }
+
+                    const perc = calcolaPercentuale(p.legVinti || 0, p.legPersi || 0);
+                    if (typeof p.currentWinRate !== "number") p.currentWinRate = perc;
+                    if (typeof p.previousWinRate !== "number") p.previousWinRate = perc;
+                });
+
+                aggiornaUI();
+                return;
+            } catch (e) {
+                console.error("Errore parsing V2, provo migrazione V1", e);
+            }
+        }
+
+        // Migrazione da V1 (solo giocatori) se esiste
+        const rawV1 = localStorage.getItem(OLD_STORAGE_KEY_V1);
+        if (rawV1) {
+            try {
+                const arr = JSON.parse(rawV1);
+                if (Array.isArray(arr)) {
+                    arr.forEach(p => {
+                        if (!p.ruolo) p.ruolo = "Giocatore";
+                        if (typeof p.presenze !== "number") p.presenze = 0;
+                        if (typeof p.legVinti !== "number") p.legVinti = 0;
+                        if (typeof p.legPersi !== "number") p.legPersi = 0;
+
+                        if (typeof p.multeTotali !== "number") {
+                            if (typeof p.multe === "number") {
+                                p.multeTotali = p.multe;
+                            } else {
+                                p.multeTotali = 0;
+                            }
+                        }
+                        if (typeof p.multePagate !== "number") {
+                            p.multePagate = 0;
+                        }
+
+                        const perc = calcolaPercentuale(p.legVinti || 0, p.legPersi || 0);
+                        p.currentWinRate = perc;
+                        p.previousWinRate = perc;
+                    });
+                    db.players = arr;
+                    db.matches = [];
+                    db.transactions = [];
+                    salvaDati();
+                    aggiornaUI();
+                    return;
+                }
+            } catch (e) {
+                console.error("Errore migrazione V1", e);
+            }
+        }
+
+        db = { players: [], matches: [], transactions: [] };
+        salvaDati();
+        aggiornaUI();
+    }
+
+    function salvaDati() {
+        localStorage.setItem(STORAGE_KEY_V2, JSON.stringify(db));
+        aggiornaUI();
+    }
+
+    // ========== UTILITIES ==========
+    function generaId() {
+        return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+    }
+
+    function formatEuro(valore) {
+        return valore.toFixed(2).replace(".", ",") + " €";
+    }
+
+    function calcolaPercentuale(legVinti, legPersi) {
+        const tot = legVinti + legPersi;
+        if (tot === 0) return 0;
+        return (legVinti / tot) * 100;
+    }
+
+    function formatDataItalian(dataStr) {
+        if (!dataStr) return "-";
+        const d = new Date(dataStr + "T00:00:00");
+        if (isNaN(d.getTime())) return dataStr;
+        const gg = String(d.getDate()).padStart(2, "0");
+        const mm = String(d.getMonth() + 1).padStart(2, "0");
+        const yyyy = d.getFullYear();
+        return `${gg}/${mm}/${yyyy}`;
+    }
+
+    function oggiISO() {
+        const d = new Date();
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, "0");
+        const gg = String(d.getDate()).padStart(2, "0");
+        return `${yyyy}-${mm}-${gg}`;
+    }
+
+    // === gestione win rate storico ===
+    function aggiornaWinRateGiocatore(g) {
+        const newPerc = calcolaPercentuale(g.legVinti || 0, g.legPersi || 0);
+        if (typeof g.currentWinRate === "number") {
+            g.previousWinRate = g.currentWinRate;
+        } else {
+            g.previousWinRate = newPerc;
+        }
+        g.currentWinRate = newPerc;
+    }
+
+    // ========== GIOCATORI ==========
+    function aggiungiGiocatore() {
+        const nomeInput = document.getElementById("nomeGiocatore");
+        const nickInput = document.getElementById("nicknameGiocatore");
+        const ruoloSelect = document.getElementById("ruoloGiocatore");
+
+        const nome = nomeInput.value.trim();
+        const nickname = nickInput.value.trim();
+        const ruolo = ruoloSelect.value;
+
+        if (!nome) {
+            alert("Inserisci almeno il nome del giocatore.");
+            return;
+        }
+
+        const nuovo = {
+            id: generaId(),
+            nome: nome,
+            nickname: nickname || "",
+            ruolo: ruolo || "Giocatore",
+            presenze: 0,
+            legVinti: 0,
+            legPersi: 0,
+            multeTotali: 0,
+            multePagate: 0,
+            currentWinRate: 0,
+            previousWinRate: 0
+        };
+
+        db.players.push(nuovo);
+        nomeInput.value = "";
+        nickInput.value = "";
+        ruoloSelect.value = "Giocatore";
+        salvaDati();
+    }
+
+    function trovaGiocatore(id) {
+        return db.players.find(p => p.id === id);
+    }
+
+    function aggiungiPresenza(id) {
+        const g = trovaGiocatore(id);
+        if (!g) return;
+        g.presenze += 1;
+        salvaDati();
+    }
+
+    function aggiungiLegVinto(id) {
+        const g = trovaGiocatore(id);
+        if (!g) return;
+        g.legVinti += 1;
+        aggiornaWinRateGiocatore(g);
+        salvaDati();
+    }
+
+    function aggiungiLegPerso(id) {
+        const g = trovaGiocatore(id);
+        if (!g) return;
+        g.legPersi += 1;
+        aggiornaWinRateGiocatore(g);
+        salvaDati();
+    }
+
+    function aggiungiMulte(id) {
+        const g = trovaGiocatore(id);
+        if (!g) return;
+
+        const valore = prompt("Inserisci importo della multa (es. 2.50):", "0");
+        if (valore === null) return;
+
+        const num = parseFloat(String(valore).replace(",", "."));
+        if (isNaN(num) || num <= 0) {
+            alert("Valore non valido.");
+            return;
+        }
+
+        if (typeof g.multeTotali !== "number") g.multeTotali = 0;
+        if (typeof g.multePagate !== "number") g.multePagate = 0;
+
+        g.multeTotali += num;
+        salvaDati();
+    }
+
+    function pagaMulta(id) {
+        const g = trovaGiocatore(id);
+        if (!g) return;
+
+        const tot = g.multeTotali || 0;
+        const pag = g.multePagate || 0;
+        const daPagare = Math.max(0, tot - pag);
+
+        if (daPagare <= 0) {
+            alert("Questo giocatore non ha multe da pagare.");
+            return;
+        }
+
+        const valore = prompt(
+            `Importo pagato da ${g.nome} (da pagare: ${formatEuro(daPagare)}).`,
+            daPagare.toFixed(2).replace(".", ",")
+        );
+        if (valore === null) return;
+
+        let num = parseFloat(String(valore).replace(",", "."));
+        if (isNaN(num) || num <= 0) {
+            alert("Valore non valido.");
+            return;
+        }
+
+        if (num > daPagare) {
+            const conferma = confirm(
+                "Stai inserendo un importo superiore al dovuto. Vuoi registrare comunque l'intero importo?"
+            );
+            if (!conferma) {
+                num = daPagare;
+            }
+        }
+
+        if (typeof g.multePagate !== "number") g.multePagate = 0;
+        g.multePagate += num;
+
+        const movimento = {
+            id: generaId(),
+            data: oggiISO(),
+            tipo: "Entrata",
+            categoria: "Multe pagate",
+            descrizione: `Pagamento multa: ${g.nome}`,
+            importo: num,
+            createdAt: new Date().toISOString()
+        };
+        db.transactions.push(movimento);
+
+        salvaDati();
+    }
+
+    function modificaCampoNumericoGiocatore(id, campo) {
+        const g = trovaGiocatore(id);
+        if (!g) return;
+
+        const attuale = g[campo] || 0;
+        const valore = prompt(`Nuovo valore per ${campo} (attuale: ${attuale})`, attuale);
+        if (valore === null) return;
+
+        const num = parseInt(valore, 10);
+        if (!isNaN(num) && num >= 0) {
+            g[campo] = num;
+            if (campo === "legVinti" || campo === "legPersi") {
+                aggiornaWinRateGiocatore(g);
+            }
+            salvaDati();
+        } else {
+            alert("Valore non valido.");
+        }
+    }
+
+    function modificaRuolo(id) {
+        const g = trovaGiocatore(id);
+        if (!g) return;
+
+        const nuovoRuolo = prompt(
+            'Nuovo ruolo per ' + g.nome + ' (es. "Capitano", "Giocatore", "Riserva")',
+            g.ruolo || "Giocatore"
+        );
+        if (nuovoRuolo === null) return;
+
+        const r = nuovoRuolo.trim();
+        if (!r) {
+            alert("Ruolo non valido.");
+            return;
+        }
+        g.ruolo = r;
+        salvaDati();
+    }
+
+    function eliminaGiocatore(id) {
+        if (!confirm("Sei sicuro di voler eliminare questo giocatore?")) return;
+        db.players = db.players.filter(p => p.id !== id);
+        salvaDati();
+    }
+
+    function aggiornaRiepilogoGiocatori() {
+        const el = document.getElementById("riepilogoGeneraleGiocatori");
+        if (!db.players.length) {
+            el.textContent = "Nessun giocatore inserito.";
+            return;
+        }
+
+        let totPres = 0, totVinti = 0, totPersi = 0;
+        let totMulteAssegnate = 0, totMultePagate = 0, totMulteDaPagare = 0;
+        let capitani = 0, vice = 0, riserve = 0;
+
+        db.players.forEach(g => {
+            const ruolo = (g.ruolo || "").toLowerCase();
+            if (ruolo.includes("capitano") && !ruolo.includes("vice")) capitani++;
+            if (ruolo.includes("vice")) vice++;
+            if (ruolo.includes("riserva")) riserve++;
+
+            totPres += g.presenze || 0;
+            totVinti += g.legVinti || 0;
+            totPersi += g.legPersi || 0;
+
+            const assegnate = g.multeTotali || 0;
+            const pagate = g.multePagate || 0;
+            const daPagare = Math.max(0, assegnate - pagate);
+
+            totMulteAssegnate += assegnate;
+            totMultePagate += pagate;
+            totMulteDaPagare += daPagare;
+        });
+
+        const perc = calcolaPercentuale(totVinti, totPersi);
+        el.innerHTML =
+            `Giocatori: <strong>${db.players.length}</strong> ` +
+            `| Capitani: <strong>${capitani}</strong> ` +
+            `| Vice: <strong>${vice}</strong> ` +
+            `| Riserve: <strong>${riserve}</strong><br>` +
+            `Presenze totali: <strong>${totPres}</strong> | ` +
+            `Leg totali: <strong>${totVinti + totPersi}</strong> ` +
+            `(<span>${totVinti} vinti / ${totPersi} persi</span>) | ` +
+            `Win rate squadra (da giocatori): <strong>${perc.toFixed(1)}%</strong><br>` +
+            `Multe assegnate: <strong>${formatEuro(totMulteAssegnate)}</strong> | ` +
+            `Pagate: <strong>${formatEuro(totMultePagate)}</strong> | ` +
+            `Da pagare: <strong>${formatEuro(totMulteDaPagare)}</strong>`;
+    }
+
+    function renderGiocatori() {
+        const tbody = document.getElementById("tbodyGiocatori");
+        tbody.innerHTML = "";
+
+        if (!db.players.length) {
+            aggiornaRiepilogoGiocatori();
+            return;
+        }
+
+        const ordinati = [...db.players].sort((a, b) =>
+            a.nome.localeCompare(b.nome, "it", {sensitivity: "base"})
+        );
+
+        ordinati.forEach((g, index) => {
+            const tr = document.createElement("tr");
+
+            const current = typeof g.currentWinRate === "number"
+                ? g.currentWinRate
+                : calcolaPercentuale(g.legVinti || 0, g.legPersi || 0);
+            const previous = typeof g.previousWinRate === "number"
+                ? g.previousWinRate
+                : current;
+
+            let badgeClass = "badge-neutral";
+            if (current > 60) badgeClass = "badge-good";
+            else if (current > 0 && current < 40) badgeClass = "badge-bad";
+
+            let trendClass = "trend-stable";
+            let trendSymbol = "➖";
+            if (current > previous) {
+                trendClass = "trend-up";
+                trendSymbol = "🔼";
+            } else if (current < previous) {
+                trendClass = "trend-down";
+                trendSymbol = "🔽";
+            }
+
+            const ruolo = g.ruolo || "Giocatore";
+
+            const assegnate = g.multeTotali || 0;
+            const pagate = g.multePagate || 0;
+            const daPagare = Math.max(0, assegnate - pagate);
+
+            tr.innerHTML = `
+                <td>${index + 1}</td>
+                <td class="center">
+                    <strong>${g.nome}</strong>
+                    ${g.nickname ? `<div style="font-size:0.75rem; color:#bababa;">"${g.nickname}"</div>` : ""}
+                </td>
+                <td>
+                    <span class="badge badge-role">${ruolo}</span><br>
+                    <button class="btn-small btn-warning" onclick="modificaRuolo('${g.id}')">Cambia</button>
+                </td>
+                <td>
+                    ${g.presenze || 0}
+                    <div>
+                        <button class="btn-small btn-secondary" title="Aggiungi presenza" onclick="aggiungiPresenza('${g.id}')">+1</button>
+                        <button class="btn-small btn-warning" title="Modifica presenze" onclick="modificaCampoNumericoGiocatore('${g.id}', 'presenze')">✏️</button>
+                    </div>
+                </td>
+                <td>
+                    ${g.legVinti || 0}
+                    <div>
+                        <button class="btn-small btn-secondary" title="Leg vinto" onclick="aggiungiLegVinto('${g.id}')">+1</button>
+                        <button class="btn-small btn-warning" title="Modifica leg vinti" onclick="modificaCampoNumericoGiocatore('${g.id}', 'legVinti')">✏️</button>
+                    </div>
+                </td>
+                <td>
+                    ${g.legPersi || 0}
+                    <div>
+                        <button class="btn-small btn-secondary" title="Leg perso" onclick="aggiungiLegPerso('${g.id}')">+1</button>
+                        <button class="btn-small btn-warning" title="Modifica leg persi" onclick="modificaCampoNumericoGiocatore('${g.id}', 'legPersi')">✏️</button>
+                    </div>
+                </td>
+                <td>
+                    <span class="badge ${badgeClass}">${isNaN(current) ? "0.0" : current.toFixed(1)}%</span>
+                    <div class="${trendClass}">${trendSymbol}</div>
+                    <div style="font-size:0.7rem; color:#bababa;">su ${(g.legVinti || 0) + (g.legPersi || 0)} leg</div>
+                </td>
+                <td class="right" style="font-size:0.8rem; text-align:left;">
+                    <div>Totale: <strong>${formatEuro(assegnate)}</strong></div>
+                    <div>Pagato: <span class="amount-income">${formatEuro(pagate)}</span></div>
+                    <div>Da pagare: <span class="amount-expense">${formatEuro(daPagare)}</span></div>
+                    <div style="margin-top:0.25rem;">
+                        <button class="btn-small btn-secondary" title="Aggiungi multa" onclick="aggiungiMulte('${g.id}')">+ multa</button>
+                        <button class="btn-small btn-warning" title="Segna come pagata" onclick="pagaMulta('${g.id}')">paga</button>
+                    </div>
+                </td>
+                <td>
+                    <button class="btn-small btn-danger" onclick="eliminaGiocatore('${g.id}')">🗑️</button>
+                </td>
+            `;
+
+            tbody.appendChild(tr);
+        });
+
+        aggiornaRiepilogoGiocatori();
+    }
+
+    // ========= PARTITE =========
+    function aggiungiPartita() {
+        const dateInput = document.getElementById("matchDate");
+        const oppInput = document.getElementById("matchOpponent");
+        const typeSelect = document.getElementById("matchType");
+        const locInput = document.getElementById("matchLocation");
+
+        const ourSetsInput = document.getElementById("matchOurSets");
+        const theirSetsInput = document.getElementById("matchTheirSets");
+        const ourLegsInput = document.getElementById("matchOurLegs");
+        const theirLegsInput = document.getElementById("matchTheirLegs");
+        const notesInput = document.getElementById("matchNotes");
+
+        const data = dateInput.value;
+        const avversario = oppInput.value.trim();
+        const tipo = typeSelect.value;
+        const luogo = locInput.value.trim();
+
+        const ourSets = parseInt(ourSetsInput.value || "0", 10);
+        const theirSets = parseInt(theirSetsInput.value || "0", 10);
+        const ourLegs = parseInt(ourLegsInput.value || "0", 10);
+        const theirLegs = parseInt(theirLegsInput.value || "0", 10);
+        const note = notesInput.value.trim();
+
+        if (!data) {
+            alert("Inserisci la data della partita.");
+            return;
+        }
+        if (!avversario) {
+            alert("Inserisci il nome dell'avversario.");
+            return;
+        }
+
+        const partita = {
+            id: generaId(),
+            data: data,
+            avversario: avversario,
+            tipo: tipo,
+            luogo: luogo,
+            ourSets: isNaN(ourSets) ? 0 : ourSets,
+            theirSets: isNaN(theirSets) ? 0 : theirSets,
+            ourLegs: isNaN(ourLegs) ? 0 : ourLegs,
+            theirLegs: isNaN(theirLegs) ? 0 : theirLegs,
+            note: note,
+            createdAt: new Date().toISOString()
+        };
+
+        db.matches.push(partita);
+
+        oppInput.value = "";
+        locInput.value = "";
+        ourSetsInput.value = "0";
+        theirSetsInput.value = "0";
+        ourLegsInput.value = "0";
+        theirLegsInput.value = "0";
+        notesInput.value = "";
+
+        salvaDati();
+    }
+
+    function eliminaPartita(id) {
+        if (!confirm("Vuoi davvero eliminare questa partita?")) return;
+        db.matches = db.matches.filter(m => m.id !== id);
+        salvaDati();
+    }
+
+    function getEsitoPartita(m) {
+        const ourSets = typeof m.ourSets === "number" ? m.ourSets : null;
+        const theirSets = typeof m.theirSets === "number" ? m.theirSets : null;
+
+        if (ourSets !== null && theirSets !== null && (ourSets !== 0 || theirSets !== 0)) {
+            if (ourSets > theirSets) return "Vittoria";
+            if (ourSets < theirSets) return "Sconfitta";
+            return "Pareggio";
+        }
+
+        if (m.ourLegs > m.theirLegs) return "Vittoria";
+        if (m.ourLegs < m.theirLegs) return "Sconfitta";
+        return "Pareggio";
+    }
+
+    function aggiornaRiepilogoPartite() {
+        const el = document.getElementById("riepilogoPartite");
+        if (!db.matches.length) {
+            el.textContent = "Nessuna partita registrata.";
+            return;
+        }
+
+        const totale = db.matches.length;
+        let camp = 0, amic = 0, altro = 0;
+        let win = 0, draw = 0, loss = 0;
+
+        db.matches.forEach(m => {
+            if (m.tipo === "Campionato") camp++;
+            else if (m.tipo === "Amichevole") amic++;
+            else altro++;
+
+            const esito = getEsitoPartita(m);
+            if (esito === "Vittoria") win++;
+            else if (esito === "Pareggio") draw++;
+            else loss++;
+        });
+
+        const winRate = totale ? (win / totale) * 100 : 0;
+
+        el.innerHTML =
+            `Partite totali: <strong>${totale}</strong> ` +
+            `| Campionato: <strong>${camp}</strong> ` +
+            `| Amichevoli: <strong>${amic}</strong> ` +
+            `| Altro: <strong>${altro}</strong><br>` +
+            `Esito: <strong>${win}</strong> vittorie, <strong>${draw}</strong> pareggi, <strong>${loss}</strong> sconfitte ` +
+            `| Win rate squadra (da partite): <strong>${winRate.toFixed(1)}%</strong>`;
+    }
+
+    function renderPartite() {
+        const tbody = document.getElementById("tbodyPartite");
+        tbody.innerHTML = "";
+
+        if (!db.matches.length) {
+            aggiornaRiepilogoPartite();
+            return;
+        }
+
+        const ordinati = [...db.matches].sort((a, b) => {
+            if (a.data === b.data) {
+                return (b.createdAt || "").localeCompare(a.createdAt || "");
+            }
+            return b.data.localeCompare(a.data);
+        });
+
+        ordinati.forEach((m, index) => {
+            const tr = document.createElement("tr");
+            const esito = getEsitoPartita(m);
+
+            let pillTipoClass = "pill-altro";
+            if (m.tipo === "Campionato") pillTipoClass = "pill-campionato";
+            else if (m.tipo === "Amichevole") pillTipoClass = "pill-amichevole";
+
+            let pillEsitoClass = "pill-draw";
+            if (esito === "Vittoria") pillEsitoClass = "pill-win";
+            else if (esito === "Sconfitta") pillEsitoClass = "pill-loss";
+
+            tr.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${formatDataItalian(m.data)}</td>
+                <td><span class="pill ${pillTipoClass}">${m.tipo}</span></td>
+                <td>${m.avversario}</td>
+                <td>${m.luogo || "-"}</td>
+                <td>${(m.ourSets ?? 0)} - ${(m.theirSets ?? 0)}</td>
+                <td>${m.ourLegs} - ${m.theirLegs}</td>
+                <td><span class="pill ${pillEsitoClass}">${esito}</span></td>
+                <td style="max-width:250px; font-size:0.8rem; text-align:left;">
+                    ${m.note ? m.note : "<span style='color:#777;'>-</span>"}
+                </td>
+                <td>
+                    <button class="btn-small btn-danger" onclick="eliminaPartita('${m.id}')">🗑️</button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        aggiornaRiepilogoPartite();
+    }
+
+    // ========= CONTABILITÀ =========
+    function aggiungiMovimento() {
+        const dateInput = document.getElementById("trnDate");
+        const typeSelect = document.getElementById("trnType");
+        const catInput = document.getElementById("trnCategory");
+        const amountInput = document.getElementById("trnAmount");
+        const descInput = document.getElementById("trnDescription");
+
+        let data = dateInput.value;
+        const tipo = typeSelect.value;
+        const categoria = catInput.value.trim() || "Generico";
+        const descrizione = descInput.value.trim();
+
+        let importo = parseFloat(String(amountInput.value).replace(",", "."));
+        if (isNaN(importo) || importo <= 0) {
+            alert("Inserisci un importo valido (> 0).");
+            return;
+        }
+
+        if (!data) {
+            data = oggiISO();
+        }
+
+        const movimento = {
+            id: generaId(),
+            data: data,
+            tipo: tipo,
+            categoria: categoria,
+            descrizione: descrizione,
+            importo: importo,
+            createdAt: new Date().toISOString()
+        };
+
+        db.transactions.push(movimento);
+
+        catInput.value = "";
+        amountInput.value = "";
+        descInput.value = "";
+
+        salvaDati();
+    }
+
+    function eliminaMovimento(id) {
+        if (!confirm("Vuoi davvero eliminare questo movimento?")) return;
+        db.transactions = db.transactions.filter(t => t.id !== id);
+        salvaDati();
+    }
+
+    function aggiornaRiepilogoContabilita() {
+        const el = document.getElementById("riepilogoContabilita");
+        if (!db.transactions.length) {
+            el.textContent = "Nessun movimento registrato.";
+            return;
+        }
+
+        let totEntrate = 0;
+        let totUscite = 0;
+
+        db.transactions.forEach(t => {
+            if (t.tipo === "Entrata") {
+                totEntrate += t.importo || 0;
+            } else if (t.tipo === "Uscita") {
+                totUscite += t.importo || 0;
+            }
+        });
+
+        const bilancio = totEntrate - totUscite;
+
+        el.innerHTML =
+            `Entrate totali: <strong>${formatEuro(totEntrate)}</strong> | ` +
+            `Uscite totali: <strong>${formatEuro(totUscite)}</strong> | ` +
+            `Bilancio: <strong>${formatEuro(bilancio)}</strong>`;
+    }
+
+    function renderContabilita() {
+        const tbody = document.getElementById("tbodyMovimenti");
+        tbody.innerHTML = "";
+
+        if (!db.transactions.length) {
+            aggiornaRiepilogoContabilita();
+            return;
+        }
+
+        const ordinati = [...db.transactions].sort((a, b) => {
+            if (a.data === b.data) {
+                return (b.createdAt || "").localeCompare(a.createdAt || "");
+            }
+            return b.data.localeCompare(a.data);
+        });
+
+        ordinati.forEach((t, index) => {
+            const tr = document.createElement("tr");
+            const isEntrata = t.tipo === "Entrata";
+            const pillClass = isEntrata ? "pill-income" : "pill-expense";
+            const amountClass = isEntrata ? "amount-income" : "amount-expense";
+            const sign = isEntrata ? "+" : "-";
+
+            tr.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${formatDataItalian(t.data)}</td>
+                <td><span class="pill ${pillClass}">${t.tipo}</span></td>
+                <td>${t.categoria || "-"}</td>
+                <td style="max-width:250px; font-size:0.8rem; text-align:left;">
+                    ${t.descrizione ? t.descrizione : "<span style='color:#777;'>-</span>"}
+                </td>
+                <td class="right">
+                    <span class="${amountClass}">${sign} ${formatEuro(t.importo || 0)}</span>
+                </td>
+                <td>
+                    <button class="btn-small btn-danger" onclick="eliminaMovimento('${t.id}')">🗑️</button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        aggiornaRiepilogoContabilita();
+    }
+
+    // ===== PROTEZIONE CONTABILITÀ =====
+    function aggiornaProtezioneContabilita() {
+        const section = document.getElementById("contabilitaSection");
+        const lockBox = document.getElementById("contabilitaLock");
+
+        const isUnlocked = localStorage.getItem("contabilita_unlocked") === "true";
+
+        if (isUnlocked) {
+            section.style.display = "block";
+            lockBox.style.display = "none";
+        } else {
+            section.style.display = "none";
+            lockBox.style.display = "block";
+        }
+    }
+
+    function sbloccaContabilita() {
+        const inputPass = document.getElementById("passwordContabilita").value.trim();
+        const err = document.getElementById("errorePassword");
+
+        if (inputPass === PASSWORD_CONTABILITA) {
+            localStorage.setItem("contabilita_unlocked", "true");
+            err.style.display = "none";
+            aggiornaProtezioneContabilita();
+        } else {
+            err.style.display = "block";
+        }
+    }
+
+    function bloccaContabilita() {
+        localStorage.setItem("contabilita_unlocked", "false");
+        aggiornaProtezioneContabilita();
+    }
+
+    // === UI UPDATE GLOBALE ===
+    function aggiornaUI() {
+        renderGiocatori();
+        renderPartite();
+        renderContabilita();
+        aggiornaProtezioneContabilita();
+    }
+
+    // Init
+    caricaDati();
+</script>
+
+</body>
+</html>
